@@ -3,6 +3,14 @@ __author__ = 'Timur'
 import uuid
 import _datetime
 from src.common.database import Database
+from src.common.utils import Utils
+
+# import exception error classes from errors.py
+# old code:
+# from src.models.users.errors import UserNotExistError, IncorrectPasswordError
+# new code: (put all the classes into UserErrors object)
+import src.models.users.errors as UserErrors
+
 
 class User(object):
     def __init__(self, email, password, _id=None):
@@ -22,12 +30,12 @@ class User(object):
         :param password: A sha512 hashed password
         :return: True if valid, False otherwise
         """
-        user_data = Database.find_one("users",{"email":email})
+        user_data = Database.find_one("users",{"email":email}) #Password in pbkdf2_sha512
         if user_data is None:
             # tell user that their e-mail doesn't exist
-            pass
+            raise UserErrors.UserNotExistError("Your user does not exist.")
         if not Utils.check_hashed_password(password, user_data['password']):
             # tell user that their password is wrong
-            pass
+            raise UserErrors.IncorrectPasswordError("Your password is wrong.")
 
         return True
