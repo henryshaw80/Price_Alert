@@ -3,14 +3,39 @@ __author__ = 'Timur'
 # views will be end point of API
 # we will be using Blueprint
 
-from flask import Blueprint
+from flask import Blueprint, request, url_for, render_template, session, redirect
+from src.models.users.user import User
 
 # __name__ is unique to this file when the app is running
 user_blueprint = Blueprint('users', __name__)
 
-@user_blueprint.route('/login')
+# 'GET' method request data from server, give them 'login form'
+# 'POST' method sending data to database or check whether login is valid
+@user_blueprint.route('/login', methods=['GET','POST'])
 def login_user():
-    pass
+    if request.method == 'POST':
+        # check login is valid
+        email = request.form['email']
+        password = request.form['hashed']
+
+        if User.is_login_valid(email, password):
+            # put email into session (temporary storage of data)
+            # when a browser arrives at our webpage, we give them
+            # a unique identifier. the browser will use this identifier
+            # with every request to let the webpage know that the browser
+            # is related to this email.
+            session['email'] = email
+
+            return redirect(url_for(".user_alerts"))
+            # url_for is getting the url for a specific method
+            # redirect is '301', a HTTP status code that tells the browser
+            # to change to other location (i.e. address).
+
+    # if request method is not 'POST', go to login page
+    # if request method is 'POST AND login is invalid, go to login page again
+    return render_template("users/login.html")
+
+    # area of improvement: send the user an error if their login was invalid
 
 @user_blueprint.route('/register')
 def register_user():
@@ -18,7 +43,7 @@ def register_user():
 
 @user_blueprint.route('/alerts')
 def user_alerts():
-    pass
+    return "This is the alerts page."
 
 @user_blueprint.route('/logout')
 def logout_user():
