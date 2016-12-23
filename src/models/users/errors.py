@@ -15,3 +15,11 @@ class UserNotExistError(UserError):
 class IncorrectPasswordError(UserError):
     # The init has been specified in UserError class that captures all exception
     pass
+
+class UserAlreadyRegisteredError(UserError):
+    # The init has been specified in UserError class that captures all exception
+    pass
+
+class InvalidEmailError(UserError):
+    # The init has been specified in UserError class that captures all exception
+    pass
