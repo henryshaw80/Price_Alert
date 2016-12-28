@@ -1,17 +1,20 @@
 
+
 __author__ = 'Timur'
 
 import requests
 from bs4 import BeautifulSoup
 import re
 from src.common.database import Database
-import src.models.items.contants as ItemConstants
+import src.models.items.constants as ItemConstants
+from src.models.stores.store import Store
+import uuid
 
 class Item(object):
-    def __init__(self, name, url, store):
+    def __init__(self, name, url, _id=None):
         self.name = name
         self.url = url
-        self.store = store # store where the item lives
+        store = Store.find_by_url(url) # store where the item lives
 
         # price won't be a passing parameter anymore, it will be a query
         # we access python properties instead having to raise methods
@@ -19,6 +22,15 @@ class Item(object):
         query = store.query
         # the query result, a string price, will be stored to self.price
         self.price = self.load_price(tag_name, query)
+
+        self._id = uuid.uuid4().hex if _id is None else _id
+
+        # e.g. Item("Wool Blend Peacoat",
+        # "http://www.johnlewis.com/kin-by-john-lewis-wool-blend-peacoat-navy/p3033177",
+        # Store("John Lewis UK",
+        #       "http://http://www.johnlewis.com/",
+        #       "span",
+        #       {"itemprop":"price","class":"now-price"}))
 
     def __repr__(self):
         return "<Item {} with URL {}>".format(self.name, self.url)
@@ -56,7 +68,8 @@ class Item(object):
     def json(self):
         return {
             "name": self.name,
-            "url" : self.url
+            "url" : self.url,
+            "_id" : self._id
         }
 
 
