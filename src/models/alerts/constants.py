@@ -8,3 +8,7 @@ API_KEY = "key-b21fe4a81c8a4e144267a63e45e05f0f"
 
 # Default SMTP Login
 FROM = "Mailgun Sandbox postmaster@sandbox892cb079cb034eb29dfe7a044f3bf39a.mailgun.org"
+
+COLLECTION = "alerts"
+
+ALERT_TIMEOUT = 10
