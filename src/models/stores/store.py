@@ -6,11 +6,12 @@ import src.models.stores.constants as StoreConstants
 import src.models.stores.errors as StoreErrors
 
 class Store(object):
-    def __init__(self, name, url_prefix, tag_name, query, _id=None):
+    def __init__(self, name, url_prefix, tag_name, pricequery, namequery, _id=None):
         self.name = name
         self.url_prefix = url_prefix
         self.tag_name = tag_name
-        self.query = query
+        self.pricequery = pricequery
+        self.namequery = namequery
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def __repr__(self):
@@ -22,7 +23,8 @@ class Store(object):
             "name": self.name,
             "url_prefix": self.url_prefix,
             "tag_name": self.tag_name,
-            "query": self.query
+            "pricequery": self.pricequery,
+            "namequery": self.namequery
         }
 
     @classmethod
