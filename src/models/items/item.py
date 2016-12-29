@@ -9,15 +9,15 @@ from src.models.stores.store import Store
 import uuid
 
 class Item(object):
-    def __init__(self, url, _id=None):
-        #self.name = name
+    def __init__(self, name, url, _id=None):
+        self.name = name
 
         self.url = url
         store = Store.find_by_url(url) # store where the item lives
 
         # price won't be a passing parameter anymore, it will be a query
         # we access python properties instead having to raise methods
-        tag_name = store.tag_name
+        self.tag_name = store.tag_name
 
         # e.g. Item("Wool Blend Peacoat",
         # "http://www.johnlewis.com/kin-by-john-lewis-wool-blend-peacoat-navy/p3033177",
@@ -25,9 +25,14 @@ class Item(object):
         #       "http://www.johnlewis.com/",
         #       "span",
         #       {"itemprop":"price","class":"now-price"}))
-        pricequery = store.pricequery
+        self.pricequery = store.pricequery
+
         # the query result, a string price, will be stored to self.price
-        self.price = self.load_price(tag_name, pricequery)
+        # self.price = self.load_price(tag_name, pricequery)
+        self.price = None
+
+        # when an Item is created, it won't automatically load price or name
+        # one need to call the method to web scrape price and name
 
         # e.g. Item("Wool Blend Peacoat",
         # "http://www.johnlewis.com/kin-by-john-lewis-wool-blend-peacoat-navy/p3033177",
@@ -35,43 +40,52 @@ class Item(object):
         #       "http://www.johnlewis.com/",
         #       "span",
         #       {"itemprop":"name"}))
-        namequery = store.namequery
+        #namequery = store.namequery
         # the query result, a string price, will be stored to self.price
-        self.name = self.load_name(tag_name, namequery)
+        #self.name = self.load_name(tag_name, namequery)
 
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def __repr__(self):
         return "<Item {} with URL {}>".format(self.name, self.url)
 
-    def load_price(self, tag_name, pricequery):
+    def load_price(self):
         #<span itemprop="price" class="now-price">£145.00</span>
         request = requests.get(self.url)
         content = request.content # get the content
         soup = BeautifulSoup(content, "html.parser") # parse the HTML
         # find the element
         # i.e. tag_name = "span", id ={"priceblock_dealprice"}
-        element = soup.find(tag_name, pricequery)
+        element = soup.find(self.tag_name, self.pricequery)
         string_price = element.text.strip() # remove white spaces in text
 
         pattern = re.compile("(\d+.\d+)") #regular expression for dollar and cents
         # if the amount has two amounts such as $100.22 $89.99
         # the above pattern would only identify the first amount, not the second one
         match = pattern.search(string_price)
-        # this will appoint the first amount and return the string_price
-        return match.group()
+        # match.group() will appoint the first amount and return the string_price
+        # we appoint self.price whenever we load price
+        self.price = match.group()
 
-    def load_name(self, tag_name, namequery):
+        return self.price
+
+    def load_name(self):
         #<span itemprop="name">Kin by John Lewis Wool Blend Peacoat, Navy</span>
         request = requests.get(self.url)
         content = request.content # get the content
         soup = BeautifulSoup(content, "html.parser") # parse the HTML
         # find the element
         # i.e. tag_name = "span", id ={"name"}
-        element = soup.find(tag_name, namequery)
+        element = soup.find(self.tag_name, self.namequery)
         pattern = re.compile("^([\w]+[\s])+[\w]+$") #regular expression for sentence
         match = pattern.search(element)
-        return match.group()
+        self.name = match.group()
+        return self.name
+
+    @classmethod
+    def get_by_id(cls, item_id):
+        return cls(**Database.find_one(collection=ItemConstants.COLLECTION,
+                                       query={"_id":item_id}))
 
     def save_to_mongo(self):
         # Insert JSON representation
@@ -88,7 +102,7 @@ class Item(object):
 
     def json(self):
         return {
-            #"name": self.name,
+            "name": self.name,
             "url" : self.url,
             "_id" : self._id
         }
