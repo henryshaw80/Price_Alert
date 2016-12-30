@@ -9,8 +9,7 @@ from src.models.stores.store import Store
 import uuid
 
 class Item(object):
-    def __init__(self, name, url, _id=None):
-        self.name = name
+    def __init__(self, url, _id=None):
 
         self.url = url
         store = Store.find_by_url(url) # store where the item lives
@@ -40,9 +39,9 @@ class Item(object):
         #       "http://www.johnlewis.com/",
         #       "span",
         #       {"itemprop":"name"}))
-        #namequery = store.namequery
+        self.namequery = store.namequery
         # the query result, a string price, will be stored to self.price
-        #self.name = self.load_name(tag_name, namequery)
+        self.name = self.load_name()
 
         self._id = uuid.uuid4().hex if _id is None else _id
 
@@ -77,10 +76,8 @@ class Item(object):
         # find the element
         # i.e. tag_name = "span", id ={"name"}
         element = soup.find(self.tag_name, self.namequery)
-        pattern = re.compile("^([\w]+[\s])+[\w]+$") #regular expression for sentence
-        match = pattern.search(element)
-        self.name = match.group()
-        return self.name
+        # No need regex at all (one can get the text of an element by doing element.text).
+        return element.text
 
     @classmethod
     def get_by_id(cls, item_id):
@@ -102,7 +99,6 @@ class Item(object):
 
     def json(self):
         return {
-            "name": self.name,
             "url" : self.url,
             "_id" : self._id
         }
