@@ -39,13 +39,12 @@ class Alert(object):
         # current time minus 10 minutes
         last_updated_limit = _datetime.datetime.utcnow() - _datetime.timedelta(minutes=minutes_since_update)
 
-        # the method return each element in the last 10 minutes. if it return nothing, the price needs to be updated.
-        # if last_checked is greater than equal to 10 minutes ago, return object of type Alert for each of the element
+        # if last_checked is less than equal to 10 minutes ago, return object of type Alert for each of the element
         # in mongodb cursor, which is reading from AlertConstants.COLLECTION
-        return [cls(**elem) for elem in Database.find(AlertConstants.COLLECTION, {"last_checked": {"$gte": last_updated_limit}})]
+        return [cls(**elem) for elem in Database.find(AlertConstants.COLLECTION, {"last_checked": {"$lte": last_updated_limit}})]
 
     def save_to_mongo(self):
-        Database.insert(AlertConstants.COLLECTION, self.json())
+        Database.update(AlertConstants.COLLECTION, {"_id": self._id}, self.json())
 
     def json(self):
         # since we cannot save Python object (i.e. item and user) into mongodb
