@@ -1,7 +1,7 @@
 __author__ = 'Timur'
 
 import uuid
-import datetime
+import _datetime
 import requests
 import src.models.alerts.constants as AlertConstants
 from src.common.database import Database
@@ -12,7 +12,7 @@ class Alert(object):
         self.user_email = user_email
         self.price_limit = price_limit
         self.item = Item.get_by_id(item_id)
-        self.last_checked = datetime.datetime.utcnow() if last_checked is None else last_checked
+        self.last_checked = _datetime.datetime.utcnow() if last_checked is None else last_checked
         self._id = uuid.uuid4().hex if _id is None else _id
 
     # define what they look like, how they are being printed
@@ -37,7 +37,7 @@ class Alert(object):
     @classmethod
     def find_needing_update(cls, minutes_since_update=AlertConstants.ALERT_TIMEOUT):
         # current time minus 10 minutes
-        last_updated_limit = datetime.datetime.utcnow() - datetime.timedelta(minutes=minutes_since_update)
+        last_updated_limit = _datetime.datetime.utcnow() - _datetime.timedelta(minutes=minutes_since_update)
 
         # the method return each element in the last 10 minutes. if it return nothing, the price needs to be updated.
         # if last_checked is greater than equal to 10 minutes ago, return object of type Alert for each of the element
@@ -62,7 +62,7 @@ class Alert(object):
 
     def load_item_price(self):
         self.item.load_price()
-        self.last_checked = datetime.datetime.utcnow() # to update last_checked to now
+        self.last_checked = _datetime.datetime.utcnow() # to update last_checked to now
         self.save_to_mongo() # we are saving last_checked to mongodb
         return self.item.price
 
