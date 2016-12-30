@@ -100,7 +100,8 @@ class Item(object):
     def json(self):
         return {
             "url" : self.url,
-            "_id" : self._id
+            "_id" : self._id,
+            "name": self.name
         }
 
 
