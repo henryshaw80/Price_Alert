@@ -28,7 +28,7 @@ class Item(object):
 
         # the query result, a string price, will be stored to self.price
         # self.price = self.load_price(tag_name, pricequery)
-        self.price = None
+        self.price = self.load_price()
 
         # when an Item is created, it won't automatically load price or name
         # one need to call the method to web scrape price and name
@@ -64,7 +64,7 @@ class Item(object):
         match = pattern.search(string_price)
         # match.group() will appoint the first amount and return the string_price
         # we appoint self.price whenever we load price
-        self.price = match.group()
+        self.price = float(match.group())
 
         return self.price
 
@@ -82,7 +82,7 @@ class Item(object):
     @classmethod
     def get_by_id(cls, item_id):
         return cls(**Database.find_one(collection=ItemConstants.COLLECTION,
-                                       query={"_id":item_id}))
+                                       query={"_id": item_id}))
 
     def save_to_mongo(self):
         # Insert JSON representation
@@ -100,8 +100,7 @@ class Item(object):
     def json(self):
         return {
             "url" : self.url,
-            "_id" : self._id,
-            "name": self.name
+            "_id" : self._id
         }
 
 
