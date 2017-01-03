@@ -1,7 +1,7 @@
 __author__ = 'Timur'
 # app.py stores the app but it runs from run.py
 
-from flask import Flask
+from flask import Flask, render_template
 from src.common.database import Database
 
 app = Flask(__name__)
@@ -21,6 +21,11 @@ app.secret_key = "123" #usually 32 random characters and numbers
 @app.before_first_request
 def init_db():
     Database.initialize()
+
+@app.route('/') #when we access URL with '/'
+def home():
+    return render_template('home.html')
+
 
 # import user_blueprint
 from src.models.users.views import user_blueprint
