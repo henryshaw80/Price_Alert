@@ -24,8 +24,7 @@ def init_db():
 
 @app.route('/') #when we access URL with '/'
 def home():
-    return render_template('home.html')
-
+    return render_template('home.jinja2')
 
 # import user_blueprint
 from src.models.users.views import user_blueprint
