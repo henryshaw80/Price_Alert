@@ -45,7 +45,7 @@ def login_user():
 
     # if request method is not 'POST', go to login page
     # if request method is 'POST AND login is invalid, go to login page again
-    return render_template("users/login.html")
+    return render_template("users/login.jinja2")
 
     # area of improvement: send the user an error if their login was invalid
 
@@ -64,7 +64,7 @@ def register_user():
         except UserErrors.UserError as e:
             return e.message
 
-    return render_template("users/register.html")
+    return render_template("users/register.jinja2")
 
 @user_blueprint.route('/alerts')
 def user_alerts():
