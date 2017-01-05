@@ -1,3 +1,19 @@
+.form-size {
+    max-width: 640px;
+    margin: 0 auto;
+    /* margin: 0 is for top and bottom; */
+    /* auto is for left and right making them equal*/
+
+    background_color: #E9E9E9;
+    padding: 20px;
+
+    border: 1px solid #D5D5D5;
+    -webkit-border-radius: 5px; /*for webkit*/
+    -moz-border-radius: 5px; /*for mozilla*/
+    border-radius: 5px; /*for other browser*/
+}
+
+
 /* navbar */
 .navbar-default {
     background-color: #F8F8F8;
