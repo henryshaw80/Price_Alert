@@ -28,27 +28,27 @@
             {# ul: unordered list in HTML is a bullet point #}
             {# but, in bootstrap css, they become navigation bar#}
             <ul class="nav navbar-nav">
-                {# instead using <a href="/">, we can use flask's url_for method #}
-                {# <a href="/stores"> -> blueprint: stores and method: index #}
-                {# <a href="/alerts"> -> blueprint: alerts and method: index #}
+                {# instead using a href="/", we can use flask's url_for method #}
+                {# a href="/stores" -> blueprint: stores and method: index #}
+                {# a href="/alerts" -> blueprint: alerts and method: index #}
 
-                <li><a href="{{ url_for('stores.index') }}">Stores <span class="glyphicon glyphicon-home"></a></li>
-                <li><a href="{{ url_for('alerts.index') }}">Alerts <span class="glyphicon glyphicon-bell"></a></li>
+                <li><a href="{{ url_for('stores.index') }}">Stores <span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="{{ url_for('alerts.index') }}">Alerts <span class="glyphicon glyphicon-bell"></span></a></li>
             </ul>
             {% if session['email'] %}
                 <ul class="nav navbar-nav navbar-right">
-                    {# instead using <a href="/">, we can use flask's url_for method #}
-                    {# <a href="/alerts"> -> blueprint: users and method: user_alerts #}
-                    {# <a href="/logout"> -> blueprint: users and method: logout_user #}
+                    {# instead using a href="/", we can use flask's url_for method #}
+                    {# a href="/alerts" -> blueprint: users and method: user_alerts #}
+                    {# a href="/logout" -> blueprint: users and method: logout_user #}
 
                     <li><a href="{{ url_for('users.user_alerts') }}"><span class="glyphicon glyphicon-alert"></span> Your Alerts</a></li>
                     <li><a href="{{ url_for('users.logout_user') }}"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
                 </ul>
             {% else %}
                 <ul class="nav navbar-nav navbar-right">
-                    {# instead using <a href="/">, we can use flask's url_for method #}
-                    {# <a href="/register"> -> blueprint: users and method: register_user #}
-                    {# <a href="/login"> -> blueprint: users and method: login_user #}
+                    {# instead using a href="/", we can use flask's url_for method #}
+                    {# a href="/register" -> blueprint: users and method: register_user #}
+                    {# a href="/login" -> blueprint: users and method: login_user #}
 
                     <li><a href="{{ url_for('users.register_user') }}"><span class="glyphicon glyphicon-user"></span> Sign up</a></li>
                     <li><a href="{{ url_for('users.login_user') }}"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
