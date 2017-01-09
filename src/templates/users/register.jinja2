@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="form-size">
-        <form>
+        <form action="{{ url_for('users.register_user') }}" method="post">
             {# this div contains a group that should be styled as form #}
             <div class="form-group">
                 <label for="email">Email Address</label>
