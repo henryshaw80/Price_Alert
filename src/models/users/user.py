@@ -5,6 +5,7 @@ import _datetime
 from src.common.database import Database
 from src.common.utils import Utils
 from src.models.alerts.alert import Alert
+import src.models.users.constants as UserConstants
 
 # import exception error classes from errors.py
 # old code:
@@ -31,7 +32,7 @@ class User(object):
         :param password: A sha512 hashed password
         :return: True if valid, False otherwise
         """
-        user_data = Database.find_one("users",{"email":email}) #Password in pbkdf2_sha512
+        user_data = Database.find_one(UserConstants.COLLECTION, {"email":email}) #Password in pbkdf2_sha512
         if user_data is None:
             # tell user that their e-mail doesn't exist
             raise UserErrors.UserNotExistError("Your user does not exist.")
@@ -50,7 +51,7 @@ class User(object):
         :param password: sha512-hashed password
         :return: True is registered successfully, or False otherwise
                 (exceptions can also be raised) """
-        user_data = Database.find_one("users", {"email": email})
+        user_data = Database.find_one(UserConstants.COLLECTION, {"email": email})
 
         # if user is already registered
         if user_data is not None:
@@ -68,7 +69,7 @@ class User(object):
         return True
 
     def save_to_db(self):
-        Database.insert("users", self.json())
+        Database.insert(UserConstants.COLLECTION, self.json())
 
     def json(self):
         return {
