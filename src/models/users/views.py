@@ -1,3 +1,5 @@
+
+
 __author__ = 'Timur'
 
 # views will be end point of API
@@ -17,7 +19,7 @@ def login_user():
     if request.method == 'POST':
         # check login is valid
         email = request.form['email']
-        password = request.form['hashed']
+        password = request.form['password']
 
         try:
             if User.is_login_valid(email, password):
@@ -54,7 +56,11 @@ def register_user():
     if request.method == 'POST':
         # get email and password information from forms
         email = request.form['email']
-        password = request.form['hashed']
+        password = request.form['password']
+        # previously we used 'hashed' inside the request form.
+        # however, with the latest development SSL (Secure Sockets Layer) for establishing
+        # an encrypted link between a web server and a browser.
+        # the whole connection will be encrypted and safe.
 
         try:
             if User.register_user(email, password):
@@ -68,11 +74,18 @@ def register_user():
 
 @user_blueprint.route('/alerts')
 def user_alerts():
-    return "This is the alerts page."
+    user = User.find_by_email(session['email'])
+    alerts = user.get_alerts()
+    return render_template('users/alerts.jinja2',
+                           alerts = alerts)
 
 @user_blueprint.route('/logout')
 def logout_user():
-    pass
+    session['email'] = None
+    return redirect(url_for('home'))
+    # when redirecting to a local method within a file, one need to use '.'
+    # example url_for('.home')
+    # without the '.', the url will redirect to home page
 
 @user_blueprint.route('/check_alerts/<string:user_id>')
 def check_user_alerts(user_id):
