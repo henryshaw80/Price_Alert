@@ -9,7 +9,7 @@ from src.models.stores.store import Store
 import uuid
 
 class Item(object):
-    def __init__(self, url, _id=None):
+    def __init__(self, url, name=None, price=None, _id=None):
 
         self.url = url
         store = Store.find_by_url(url) # store where the item lives
@@ -27,8 +27,8 @@ class Item(object):
         self.pricequery = store.pricequery
 
         # the query result, a string price, will be stored to self.price
-        # self.price = self.load_price(tag_name, pricequery)
-        self.price = self.load_price()
+        # initially it will be None, subsequently it will download price from database
+        self.price = None if price is None else price
 
         # when an Item is created, it won't automatically load price or name
         # one need to call the method to web scrape price and name
@@ -41,7 +41,7 @@ class Item(object):
         #       {"itemprop":"name"}))
         self.namequery = store.namequery
         # the query result, a string price, will be stored to self.price
-        self.name = self.load_name()
+        self.name = self.load_name() if name is None else name
 
         self._id = uuid.uuid4().hex if _id is None else _id
 
@@ -86,8 +86,7 @@ class Item(object):
 
     def save_to_mongo(self):
         # Insert JSON representation
-        Database.insert(collection=ItemConstants.COLLECTION,
-                        data=self.json())
+        Database.update(ItemConstants.COLLECTION, {'_id': self._id}, data=self.json())
 
     @classmethod
     def from_mongo(cls, name):
@@ -100,7 +99,9 @@ class Item(object):
     def json(self):
         return {
             "url" : self.url,
-            "_id" : self._id
+            "name": self.name,
+            "_id" : self._id,
+            "price": self.price
         }
 
 
