@@ -62,6 +62,7 @@ class Alert(object):
     def load_item_price(self):
         self.item.load_price()
         self.last_checked = _datetime.datetime.utcnow() # to update last_checked to now
+        self.item.save_to_mongo() #save the item price to items database
         self.save_to_mongo() # we are saving last_checked to mongodb
         return self.item.price
 
@@ -74,3 +75,8 @@ class Alert(object):
         return [cls(**elem) for elem in
                 Database.find(AlertConstants.COLLECTION,
                               {'user_email': user_email})]
+
+    @classmethod
+    def find_by_id(cls, alert_id):
+        return cls(**Database.find_one(AlertConstants.COLLECTION, {'_id': alert_id}))
+
