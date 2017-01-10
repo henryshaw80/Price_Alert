@@ -3,6 +3,13 @@ __author__ = 'Timur'
 from functools import wraps
 from flask import session, url_for, redirect, request
 
+# An existing function, FUNC, gets passed to requires_login decorator
+# Using wrap decorator, FUNC is then being wrap again in another function, decorated_function
+# This function is returning the function definition (notice no brackets)
+# to substitute the whole content of FUNC with content of decorated_function.
+# When we call FUNC, we are actually calling decorated_function which content
+# has replaced by the content of FUNC.
+
 def requires_login(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
@@ -10,29 +17,3 @@ def requires_login(func):
             return redirect(url_for('users.login_user', next=request.path))
         return func(*args, **kwargs)
     return decorated_function
-
-
-
-
-
-
-# my_function method gets passed to requires_login decorator
-# that function is then being wrap in another function, decorated_function
-# decorated_function can do something. and return the function that is being wrapped
-# then the decorator is returning the function definition (notice no brackets)
-# this decorated_function is substituting the content of my function.
-# when we call my_function, we are actually calling decorated_function
-# then content of my_function is being replaced by the content of decorated_function
-
-def requires_login(func):
-    @wraps(func)
-    def decorated_function(*args, **kwargs):
-        print("Hi")
-        return func(*args, **kwargs)
-    return decorated_function
-
-@requires_login
-def my_function(x, y):
-    return x + y
-
-print(my_function(5, 6))
