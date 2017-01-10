@@ -8,12 +8,13 @@ from src.common.database import Database
 from src.models.items.item import Item
 
 class Alert(object):
-    def __init__(self, user_email, price_limit, item_id, last_checked=None, _id=None):
+    def __init__(self, user_email, price_limit, item_id, active=True, last_checked=None, _id=None):
         self.user_email = user_email
         self.price_limit = price_limit
         self.item = Item.get_by_id(item_id)
         self.last_checked = _datetime.datetime.utcnow() if last_checked is None else last_checked
         self._id = uuid.uuid4().hex if _id is None else _id
+        self.active = active    # active is a flag to indicate whether the alert is active or not
 
     # define what they look like, how they are being printed
     # out using print function; their string representation
@@ -56,7 +57,8 @@ class Alert(object):
             "price_limit": self.price_limit,
             "last_checked": self.last_checked,
             "user_email": self.user_email,
-            "item_id": self.item._id
+            "item_id": self.item._id,
+            "active": self.active
         }
 
     def load_item_price(self):
@@ -80,3 +82,10 @@ class Alert(object):
     def find_by_id(cls, alert_id):
         return cls(**Database.find_one(AlertConstants.COLLECTION, {'_id': alert_id}))
 
+    def deactivate(self):
+        self.active = False
+        self.save_to_mongo()
+
+    def activate(self):
+        self.active = True
+        self.save_to_mongo()
