@@ -1,6 +1,6 @@
 __author__ = 'Timur'
 
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, redirect, url_for
 from src.models.alerts.alert import Alert
 from src.models.items.item import Item
 import src.models.users.decorators as user_decorators
@@ -33,7 +33,14 @@ def create_alert():
 @alert_blueprint.route('/deactivate/<string:alert_id>')
 @user_decorators.requires_login
 def deactivate_alert(alert_id):
-    pass
+    Alert.find_by_id(alert_id).deactivate()
+    return redirect(url_for('users.user_alerts'))
+
+@alert_blueprint.route('/activate/<string:alert_id>')
+@user_decorators.requires_login
+def activate_alert(alert_id):
+    Alert.find_by_id(alert_id).activate()
+    return redirect(url_for('users.user_alerts'))
 
 @alert_blueprint.route('/<string:alert_id>') #/alerts/<alert_id>
 @user_decorators.requires_login
@@ -41,4 +48,8 @@ def get_alert_page(alert_id):
     alert = Alert.find_by_id(alert_id)
     return render_template('alerts/alert.jinja2', alert=alert)
 
-
+@alert_blueprint.route('/check_price/<string:alert_id>')
+@user_decorators.requires_login
+def check_alert_price(alert_id):
+    Alert.find_by_id(alert_id).load_item_price()
+    return redirect(url_for('.get_alert_page', alert_id=alert_id))
