@@ -1,5 +1,3 @@
-
-
 __author__ = 'Timur'
 
 # views will be end point of API
@@ -8,6 +6,7 @@ __author__ = 'Timur'
 from flask import Blueprint, request, url_for, render_template, session, redirect
 from src.models.users.user import User
 import src.models.users.errors as UserErrors
+import src.models.users.decorators as user_decorators
 
 # __name__ is unique to this file when the app is running
 user_blueprint = Blueprint('users', __name__)
@@ -73,6 +72,7 @@ def register_user():
     return render_template("users/register.jinja2")
 
 @user_blueprint.route('/alerts')
+@user_decorators.requires_login
 def user_alerts():
     user = User.find_by_email(session['email'])
     alerts = user.get_alerts()
