@@ -2,5 +2,45 @@
 {% extends "base.jinja2" %}
 
 {% block content %}
-    <p>Nothing here yet!</p>
+    <div class="page-header">
+        <h1>Create Store</h1>
+    </div>
+    <div class="form-size">
+    <form method="post"> {# this form will only send POST request #}
+        <div class="form-group">
+            <label for="name">Store name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Store Name">
+        </div>
+        <div class="form-group">
+            <label for="url_prefix">URL prefix</label>
+            <input type="text" class="form-control" id="url_prefix" name="url_prefix" placeholder="http://..." value="http://" aria-describedby="storeURLPrefixHelp">
+            <span id="storeURLPrefixHelp" class="help-block">
+                What characters do URLs of all items in this online store start with?</br>
+                For example: http://www.amazon.com
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="tag_name">Tag name</label>
+            <input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="span" value="span" aria-describedby="storeTagNameHelp">
+            <span id="storeTagNameHelp" class="help-block">
+                What is the HTML tag of the item that contains the item price? (usually <code>span</code>)
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="namequery">Name Search Query</label>
+            <input type="text" class="form-control" id="namequery" name="namequery" placeholder='{"itemprop":"name"}' value='{"itemprop":"name"}' aria-describedby="NameQueryHelp">
+            <span id="NameQueryHelp" class="help-block">
+                What JSON query would we have to do to find the specific tag with the <strong>item name</strong>? Remember to use double quotation marks!)
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="pricequery">Price Search Query</label>
+            <input type="text" class="form-control" id="pricequery" name="pricequery" placeholder='{"itemprop":"price","class":"now-price"}' value='{"itemprop":"price","class":"now-price"}' aria-describedby="PriceQueryHelp">
+            <span id="PriceQueryHelp" class="help-block">
+                What JSON query would we have to do to find the specific tag with the <strong>item price</strong>? Remember to use double quotation marks!)
+            </span>
+        </div>
+        <button type="submit" class="btn btn-default">Create</button>
+    </form>
+    </div>
 {% endblock %}
