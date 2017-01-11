@@ -55,3 +55,7 @@ class Database(object):
     def update(collection, query, data):
         Database.DATABASE[collection].update(query, data, upsert=True)
         # upsert=TRUE if data does not exist, insert data
+
+    @staticmethod
+    def remove(collection, query):
+        Database.DATABASE[collection].remove(query)
