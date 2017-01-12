@@ -21,4 +21,6 @@
     {% endfor %}
     </div>
     <a class="btn btn-success" href="{{ url_for('alerts.create_alert') }}"><span class="glyphicon glyphicon-plus"></span> Create new</a>
+    <a class="btn btn-warning" href="{{ url_for('users.delete_alerts') }}"><span class="glyphicon glyphicon-remove-circle"></span> Delete all alerts</a>
+    <a class="btn btn-danger" href="{{ url_for('users.delete_user') }}"><span class="glyphicon glyphicon-remove-sign"></span> Delete user</a>
 {% endblock %}
