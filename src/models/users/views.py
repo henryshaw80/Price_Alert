@@ -5,6 +5,7 @@ __author__ = 'Timur'
 
 from flask import Blueprint, request, url_for, render_template, session, redirect
 from src.models.users.user import User
+from src.models.alerts.alert import Alert
 import src.models.users.errors as UserErrors
 import src.models.users.decorators as user_decorators
 
@@ -79,6 +80,14 @@ def user_alerts():
     return render_template('users/alerts.jinja2',
                            alerts = alerts)
 
+@user_blueprint.route('/delete_alerts')
+@user_decorators.requires_login
+def delete_alerts():
+    user = User.find_by_email(session['email'])
+    alerts = user.get_alerts()
+    return render_template('users/delete_alerts.jinja2',
+                           alerts = alerts)
+
 @user_blueprint.route('/logout')
 def logout_user():
     session['email'] = None
@@ -86,6 +95,13 @@ def logout_user():
     # when redirecting to a local method within a file, one need to use '.'
     # example url_for('.home')
     # without the '.', the url will redirect to home page
+
+@user_blueprint.route('/delete')
+def delete_user():
+    pass
+    #user = User.find_by_email(session['email'])
+    #session['email'] = None
+    #return redirect(url_for('home'))
 
 @user_blueprint.route('/check_alerts/<string:user_id>')
 def check_user_alerts(user_id):
