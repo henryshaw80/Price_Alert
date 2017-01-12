@@ -1,0 +1,18 @@
+<!-- linking to base.jinja2 -->
+{% extends "base.jinja2" %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Delete <small> all existing alerts</small></h1>
+    </div>
+
+    <p>Once you pre</p>
+
+    <a class="btn btn-warning" href="#"><span class="glyphicon glyphicon-remove-circle"></span> Delete all alerts</a>
+    <div class="list-group">
+    {% for alert in alerts %}
+        <h4>Alert for {{ alert.item.name }}</h4>
+    {% endfor %}
+    </div>
+
+{% endblock %}
