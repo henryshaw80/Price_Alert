@@ -1,6 +1,7 @@
 __author__ = 'Timur'
 
 import pymongo
+import os
 
 class Database(object):
     #This class a definition of an object
@@ -10,7 +11,8 @@ class Database(object):
     #Universal Resource Identifier (URI)
     #static property
     #this is a class URI redides indide Database class
-    URI = "mongodb://127.0.0.1:27017"
+    #URI = "mongodb://127.0.0.1:27017"
+    URI = os.environ.get("MONGOLAB_URI")
     DATABASE = None
 
     #all object will have the same URI and Database
