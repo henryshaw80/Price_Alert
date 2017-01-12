@@ -6,13 +6,14 @@
         <h1>Delete <small> all existing alerts</small></h1>
     </div>
 
-    <p>Once you pre</p>
+    <h4>You are about to delete all your alerts.</h4>
 
     <a class="btn btn-warning" href="#"><span class="glyphicon glyphicon-remove-circle"></span> Delete all alerts</a>
-    <div class="list-group">
+
+    <div class="table table-condensed">
     {% for alert in alerts %}
-        <h4>Alert for {{ alert.item.name }}</h4>
+        <p>{{ alert.item.name }} {{ alert.active }}</p>
     {% endfor %}
-    </div>
+    </div >
 
 {% endblock %}
