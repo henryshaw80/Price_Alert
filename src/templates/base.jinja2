@@ -33,7 +33,6 @@
                 {# a href="/alerts" -> blueprint: alerts and method: index #}
 
                 <li><a href="{{ url_for('stores.index') }}">Stores <span class="glyphicon glyphicon-home"></span></a></li>
-                <li><a href="{{ url_for('alerts.index') }}">Alerts <span class="glyphicon glyphicon-bell"></span></a></li>
             </ul>
             {% if session['email'] %}
                 <ul class="nav navbar-nav navbar-right">
