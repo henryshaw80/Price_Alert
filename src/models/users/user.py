@@ -78,6 +78,9 @@ class User(object):
             "password": self.password
         }
 
+    def delete_user(self):
+        Database.remove(UserConstants.COLLECTION, {'_id':self._id})
+
     @classmethod
     def find_by_email(cls, email):
         return cls(**Database.find_one('users', {'email': email}))
