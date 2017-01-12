@@ -1,13 +1,15 @@
 __author__ = 'Timur'
 
+import os
+
 # API Base URL
-URL = "https://api.mailgun.net/v3/sandbox892cb079cb034eb29dfe7a044f3bf39a.mailgun.org/messages"
+URL = os.environ.get('MAILGUN_URL')
 
 # API Key
-API_KEY = "key-b21fe4a81c8a4e144267a63e45e05f0f"
+API_KEY = os.environ.get('MAILGUN_API_KEY')
 
 # Default SMTP Login
-FROM = "Mailgun Sandbox postmaster@sandbox892cb079cb034eb29dfe7a044f3bf39a.mailgun.org"
+FROM = os.environ.get('MAILGUN_FROM')
 
 COLLECTION = "alerts"
 
