@@ -29,8 +29,8 @@ class Database(object):
     def initialize():
         #the URI lives inside Database
         client = pymongo.MongoClient(Database.URI)
-        #accessing database called 'local'
-        Database.DATABASE = client['local']
+        #accessing Mongolab database (heroku_nrh8chjv) in Heroku
+        Database.DATABASE = client.get_default_database()
 
     @staticmethod
     def insert(collection, data):
