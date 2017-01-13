@@ -23,6 +23,8 @@ def create_alert():
         alert = Alert(session['email'], price_limit, item._id)
         alert.load_item_price() #this already saves to MongoDB
 
+        return redirect(url_for('users.user_alerts'))
+
     # What happens if it's a GET request
     return render_template('alerts/new_alert.jinja2')
 
