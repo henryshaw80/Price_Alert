@@ -7,7 +7,7 @@ from src.common.database import Database
 app = Flask(__name__)
 
 # import config to be loaded to app
-app.config.from_object('config')
+app.config.from_object('src.config')
 
 # allow session to be secured; when a browser comes into an application
 # and request of a webpage; Flask will put a cookie with a session id
